@@ -1,6 +1,10 @@
 {
   "name": "mvc-node",
+<<<<<<< HEAD
  "type": "module",
+=======
+  "type": "module",
+>>>>>>> develop
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

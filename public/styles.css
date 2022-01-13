@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 body {
+  height: 100%;
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 20px;
   font-family: "Poppins", serif;
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
 }
 p,
 h1,
@@ -51,7 +53,8 @@ nav a:hover {
 footer {
   color: #777;
   text-align: center;
-  margin: 80px auto 20px;
+  margin: 80px auto 30px;
+  margin-top: auto;
 }
 h2 {
   margin-bottom: 40px;
