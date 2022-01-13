@@ -1,9 +1,11 @@
-const express = require("express");
-const morgan = require("morgan");
-const mongoose = require("mongoose");
-const Blog = require("./models/blog");
+import express from "express";
+import morgan from "morgan";
+import mongoose from "mongoose";
+import { Blog } from "./models/blog.js";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+// load env vars
+dotenv.config();
 // express app
 const app = express();
 
@@ -35,60 +37,51 @@ app.get("/", (req, res) => {
 });
 
 app.get("/about", (req, res) => {
-  res.render("about", { title: "About" });
+  res.render("about", { title: "Nosotros" });
 });
 
 // blog routes
 app.get("/blogs/create", (req, res) => {
-  res.render("create", { title: "Create a new blog" });
+  res.render("create", { title: "Crear nuevo blog" });
 });
 
-app.get("/blogs", (req, res) => {
-  Blog.find()
-    .sort({ createdAt: -1 })
-    .then((result) => {
-      res.render("index", { blogs: result, title: "All blogs" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.get("/blogs", async (req, res) => {
+  try {
+    const result = await Blog.find().sort({ createdAt: -1 });
+    res.render("index", { blogs: result, title: "Blogs" });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-app.post("/blogs", (req, res) => {
-  // console.log(req.body);
-  const blog = new Blog(req.body);
-
-  blog
-    .save()
-    .then((result) => {
-      res.redirect("/blogs");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.post("/blogs", async (req, res) => {
+  try {
+    const blog = new Blog(req.body);
+    await blog.save();
+    res.redirect("/blogs");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-app.get("/blogs/:id", (req, res) => {
-  const id = req.params.id;
-  Blog.findById(id)
-    .then((result) => {
-      res.render("details", { blog: result, title: "Blog Details" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.get("/blogs/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Blog.findById(id);
+    res.render("details", { blog: result, title: "" });
+  } catch (error) {
+    console.log(err);
+  }
 });
 
-app.delete("/blogs/:id", (req, res) => {
-  const id = req.params.id;
-
-  Blog.findByIdAndDelete(id)
-    .then((result) => {
-      res.json({ redirect: "/blogs" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.delete("/blogs/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Blog.findByIdAndDelete(id);
+    res.json({ redirect: "/blogs" });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // 404 page
